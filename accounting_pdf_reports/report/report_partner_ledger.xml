@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_partnerledger">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <t t-set="data_report_margin_top" t-value="12"/>
+                <t t-set="data_report_header_spacing" t-value="9"/>
+                <t t-set="data_report_dpi" t-value="110"/>
+                <div class="page">
+                    <center><h2>Account Statement</h2></center>
+
+                    <div class="row">
+<!--                        <div class="col-3">-->
+<!--                            <h2>Bipin Prajapati</h2>-->
+<!--                            &lt;!&ndash;                            <p t-esc="res_company.name"/>&ndash;&gt;-->
+<!--                        </div>-->
+                        <div class="col-3">
+                            <t t-if="data['form']['date_from']">
+                                <strong>Date from :</strong>
+                                <span t-esc="data['form']['date_from']"/>
+                                <br/>
+                            </t>
+                            <t t-if="data['form']['date_to']">
+                                <strong>Date to :</strong>
+                                <span t-esc="data['form']['date_to']"/>
+                            </t>
+                        </div>
+                        <div class="col-3">
+                            <strong>Target Moves:</strong>
+                            <p t-if="data['form']['target_move'] == 'all'">All Entries</p>
+                            <p t-if="data['form']['target_move'] == 'posted'">All Posted Entries</p>
+                        </div>
+                    </div>
+
+                    <style>
+                        thead, table, tr, th, td {
+                        border: 1px solid black;
+                        border-collapse: collapse;
+                        }
+                    </style>
+
+                    <table class="table table-sm table-reports">
+                        <thead>
+                            <tr style=" border: 1px solid black; border-collapse: collapse;">
+                                <!--                                <th>Date</th>-->
+                                <!--                                <th>JRNL</th>-->
+                                <!--                                <th>Account</th>-->
+                                <!--                                <th>Ref</th>-->
+                                <!--                                <th>Debit</th>-->
+                                <!--                                <th>Credit</th>-->
+                                <!--                                <th>Balance</th>-->
+                                <!--                                <th t-if="data['form']['amount_currency']">Currency</th>-->
+                                <th style=" border: 1px solid black; border-collapse: collapse; color:green;">Date</th>
+                                <!--                                <th>JRNL</th>-->
+                                <th style=" border: 1px solid black; border-collapse: collapse;color:green;">Account</th>
+                                <th style=" border: 1px solid black; border-collapse: collapse;color:green;">Doc#</th>
+                                <th style=" border: 1px solid black; border-collapse: collapse;color:green;">Description</th>
+                                <th style=" border: 1px solid black; border-collapse: collapse;color:green;">Debit</th>
+                                <th style=" border: 1px solid black; border-collapse: collapse;color:green;">Credit</th>
+                                <th style=" border: 1px solid black; border-collapse: collapse;color:green;">Balance</th>
+                                <!--                                <th t-if="data['form']['amount_currency']">Currency</th>-->
+                            </tr>
+                        </thead>
+                        <t t-foreach="docs" t-as="o">
+                            <tbody>
+                                <tr >
+                                    <td colspan="6" style=" border: 1px solid black; border-collapse: collapse;">
+<!--                                        <strong t-esc="o.ref"/>-->
+<!--                                        - -->
+<!--                                        <strong t-esc="o.name"/>-->
+                                        <strong  t-esc="o.name"/>  -  <strong style="color:red;">Opening Balance</strong>
+                                    </td>
+<!--                                    <td class="text-right">-->
+<!--                                        <strong t-esc="sum_partner(data, o, 'debit')"-->
+<!--                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
+<!--                                    </td>-->
+<!--                                    <td class="text-right">-->
+<!--                                        <strong t-esc="sum_partner(data, o, 'credit')"-->
+<!--                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>-->
+<!--                                    </td>-->
+                                    <td class="text-right" style=" border: 1px solid black; border-collapse: collapse;">
+                                        <strong t-esc="sum_partner(data, o, 'debit - credit')"
+                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr t-foreach="lines(data, o)" t-as="line">
+                                    <td>
+                                        <span t-esc="line['date']"/>
+                                    </td>
+                                    <!--                                    <td>-->
+                                    <!--                                        <span t-esc="line['code']"/>-->
+                                    <!--                                    </td>-->
+                                    <td>
+                                        <span t-esc="line['a_code']"/><span t-esc="line['id']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line['move_name']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line['displayed_name']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="line['debit']"
+                                              t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="line['credit']"
+                                              t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="line['progress']"
+                                              t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <!--                                    <td class="text-right" t-if="data['form']['amount_currency']">-->
+                                    <!--                                        <t t-if="line['currency_id']">-->
+                                    <!--                                            <span t-esc="line['amount_currency']"-->
+                                    <!--                                                  t-options="{'widget': 'monetary', 'display_currency': line['currency_id']}"/>-->
+                                    <!--                                        </t>-->
+                                    <!--                                    </td>-->
+                                </tr>
+                            </tbody>
+                        </t>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

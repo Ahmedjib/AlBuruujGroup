@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="product_category_expense_transfer" model="product.category">
+            <field name="name">Expense Transfer</field>
+            <field name="property_valuation" >real_time</field>
+        </record>
+    </data>
+</odoo>
